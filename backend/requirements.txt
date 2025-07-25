@@ -1,0 +1,148 @@
+# ============================================
+# WuYue Quantum Computing Environment Requirements
+# ============================================
+
+# Core Python Dependencies
+certifi==2025.4.26
+python-dotenv==0.21.0
+requests==2.31.0
+typing_extensions==4.11.0
+
+# ============================================
+# WuYue Quantum Framework (Local Installation)
+# ============================================
+# Install these from local wheels in SDK folder:
+# pip install SDK/wuyue-0.5-py3-none-any.whl
+# pip install SDK/wuyue_machine_learning-1.0.9-py3-none-any.whl
+
+# Note: These are installed from local wheels, not PyPI
+# wuyue==0.5
+# wuyue_machine_learning==1.0.9
+
+# ============================================
+# Web Framework & API
+# ============================================
+fastapi==0.115.2
+uvicorn==0.35.0
+starlette==0.40.0
+websockets==12.0
+websocket-client==1.8.0
+h11==0.14.0
+httpcore==1.0.2
+httpx==0.25.2
+httpx-sse==0.4.0
+
+# ============================================
+# LangChain Ecosystem
+# ============================================
+langchain==0.3.3
+langchain-community==0.3.2
+langchain-core==0.3.63
+langchain-openai==0.2.2
+langchain-text-splitters==0.3.8
+langgraph==0.2.35
+langgraph-checkpoint==2.1.0
+langserve==0.3.0
+langsmith==0.1.147
+
+# ============================================
+# AI Models & APIs
+# ============================================
+openai==1.93.2
+google-generativeai==0.8.4
+tiktoken==0.9.0
+zhipuai==2.1.5.20250708
+
+# ============================================
+# Tavily Search
+# ============================================
+tavily_python==0.5.1
+
+# ============================================
+# Data Processing & Validation
+# ============================================
+pydantic==2.8.2
+pydantic_core==2.20.1
+pydantic-settings==2.6.1
+protobuf==4.25.3
+jsonschema==4.23.0
+PyYAML==6.0.1
+orjson==3.10.18
+
+# ============================================
+# Database
+# ============================================
+pymongo==4.6.3
+SQLAlchemy==2.0.34
+
+# ============================================
+# Scientific Computing & ML
+# ============================================
+numpy==2.2.6
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+scikit-image==0.24.0
+matplotlib==3.10.3
+seaborn==0.13.2
+plotly==5.24.1
+
+# ============================================
+# Quantum Computing Dependencies
+# ============================================
+# These support the wuyue quantum framework
+rustworkx==0.16.0
+qrcode==7.4.2
+sympy==1.13.2
+
+# ============================================
+# Machine Learning & Optimization
+# ============================================
+tensorflow==2.19.0
+keras==3.10.0
+tensorboard==2.19.0
+tensorboard-data-server==0.7.2
+cvxpy==1.6.6
+clarabel==0.11.1
+ecos==2.0.14
+osqp==1.0.4
+scs==3.2.7.post2
+
+# ============================================
+# NLP & Text Processing
+# ============================================
+nltk==3.9.1
+gensim==4.3.3
+beautifulsoup4==4.12.3
+
+# ============================================
+# PDF Generation
+# ============================================
+reportlab==4.3.1
+
+# ============================================
+# Utilities & Tools
+# ============================================
+tqdm==4.66.5
+click==8.1.7
+rich==13.7.1
+loguru==0.7.3
+joblib==1.4.2
+dill==0.3.8
+
+# ============================================
+# Async & Concurrency
+# ============================================
+asyncio==3.4.3
+aiohttp==3.9.5
+aiohappyeyeballs==2.4.0
+aiosignal==1.2.0
+
+# ============================================
+# Development Tools (Optional)
+# ============================================
+# jupyter==1.0.0
+# notebook==7.2.2
+# ipython==8.27.0
+# black==24.8.0
+# pytest==7.4.4
