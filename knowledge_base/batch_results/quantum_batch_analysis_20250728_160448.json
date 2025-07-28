@@ -1,6 +1,6 @@
 {
-  "batch_id": "quantum_batch_20250724_171754",
-  "timestamp": "20250724_171754",
+  "batch_id": "quantum_batch_20250728_160448",
+  "timestamp": "20250728_160448",
   "analysis_type": "quantum_parallel_enhanced",
   "total_companies": 4,
   "successful_count": 4,
@@ -17,8 +17,8 @@
     "max_companies": 8
   },
   "quantum_statistics": {
-    "avg_quantum_advantage": 0.6649073416199952,
-    "avg_entanglement_strength": 0.7790425552130503
+    "avg_quantum_advantage": 0.6492285095856525,
+    "avg_entanglement_strength": 0.8544268076154755
   },
   "input_companies": [
     {

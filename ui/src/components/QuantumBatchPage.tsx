@@ -42,49 +42,88 @@ const QuantumBatchPage: React.FC<QuantumBatchPageProps> = ({ API_URL, WS_URL }) 
   // WebSocket connection
   const connectWebSocket = (jobId: string) => {
     const wsUrl = `${WS_URL}/research/ws/${jobId}`;
-    
+
     try {
       wsRef.current = new WebSocket(wsUrl);
-      
+
       wsRef.current.onopen = () => {
         console.log('WebSocket connected for quantum batch analysis');
       };
-      
+
       wsRef.current.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
           console.log('WebSocket message:', data);
-          
-          setStatus(data.status || 'processing');
-          setMessage(data.message || '');
-          
-          // Extract phase information from message
-          if (data.message) {
-            if (data.message.includes('Collecting high-quality data')) {
-              setCurrentPhase('data_collection');
-              setProgress(20);
-            } else if (data.message.includes('Quantum encoding')) {
-              setCurrentPhase('quantum_encoding');
-              setProgress(40);
-            } else if (data.message.includes('parallel processing')) {
-              setCurrentPhase('quantum_processing');
-              setProgress(60);
-            } else if (data.message.includes('Generating quantum-enhanced')) {
-              setCurrentPhase('report_generation');
-              setProgress(80);
-            } else if (data.message.includes('completed')) {
-              setCurrentPhase('knowledge_base');
-              setProgress(100);
+
+          // Handle structured status_update messages from backend
+          if (data.type === 'status_update' && data.data) {
+            const statusData = data.data;
+            setStatus(statusData.status || 'processing');
+            setMessage(statusData.message || '');
+
+            // Extract phase information from message
+            if (statusData.message) {
+              if (statusData.message.includes('Collecting high-quality data')) {
+                setCurrentPhase('data_collection');
+                setProgress(20);
+              } else if (statusData.message.includes('Quantum encoding')) {
+                setCurrentPhase('quantum_encoding');
+                setProgress(40);
+              } else if (statusData.message.includes('parallel processing')) {
+                setCurrentPhase('quantum_processing');
+                setProgress(60);
+              } else if (statusData.message.includes('Generating quantum-enhanced')) {
+                setCurrentPhase('report_generation');
+                setProgress(80);
+              } else if (statusData.message.includes('completed')) {
+                setCurrentPhase('knowledge_base');
+                setProgress(100);
+              }
             }
-          }
-          
-          if (data.status === 'completed') {
-            setIsResearching(false);
-            setResults(data.result);
-            setProgress(100);
-          } else if (data.status === 'failed' || data.status === 'error') {
-            setIsResearching(false);
-            setError(data.message || 'Analysis failed');
+
+            // Handle completion with results
+            if (statusData.status === 'completed' && statusData.result) {
+              console.log('Analysis completed! Results:', statusData.result);
+              setIsResearching(false);
+              setResults(statusData.result);
+              setProgress(100);
+            } else if (statusData.status === 'failed' || statusData.status === 'error') {
+              setIsResearching(false);
+              setError(statusData.message || statusData.error || 'Analysis failed');
+            }
+          } else {
+            // Fallback for direct messages
+            setStatus(data.status || 'processing');
+            setMessage(data.message || '');
+
+            // Extract phase information from message
+            if (data.message) {
+              if (data.message.includes('Collecting high-quality data')) {
+                setCurrentPhase('data_collection');
+                setProgress(20);
+              } else if (data.message.includes('Quantum encoding')) {
+                setCurrentPhase('quantum_encoding');
+                setProgress(40);
+              } else if (data.message.includes('parallel processing')) {
+                setCurrentPhase('quantum_processing');
+                setProgress(60);
+              } else if (data.message.includes('Generating quantum-enhanced')) {
+                setCurrentPhase('report_generation');
+                setProgress(80);
+              } else if (data.message.includes('completed')) {
+                setCurrentPhase('knowledge_base');
+                setProgress(100);
+              }
+            }
+
+            if (data.status === 'completed') {
+              setIsResearching(false);
+              setResults(data.result);
+              setProgress(100);
+            } else if (data.status === 'failed' || data.status === 'error') {
+              setIsResearching(false);
+              setError(data.message || 'Analysis failed');
+            }
           }
         } catch (error) {
           console.error('Error parsing WebSocket message:', error);

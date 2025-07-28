@@ -226,6 +226,21 @@ class QuantumParallelProcessor:
                 message="⚡ Quantum encoding and parallel processing..."
             )
 
+        # 验证Tavily数据质量
+        valid_companies = 0
+        for company_name, data in tavily_data.items():
+            report = data.get('report', '')
+            if report and len(report.strip()) > 50:  # 至少有50个字符的有效报告
+                valid_companies += 1
+
+        if valid_companies == 0:
+            logger.warning("⚠️ 没有有效的Tavily数据，量子分析将基于默认参数")
+            if websocket_manager and job_id:
+                await websocket_manager.send_status_update(
+                    job_id, status="processing",
+                    message="⚠️ Limited data available, using quantum analysis with default parameters..."
+                )
+
         # 转换为single_agent格式的公司数据
         companies_data = []
         for company_name, data in tavily_data.items():
@@ -671,7 +686,7 @@ class QuantumParallelProcessor:
         if websocket_manager and job_id:
             await websocket_manager.send_status_update(
                 job_id, status="processing",
-                message="🧠 Generating quantum-enhanced reports..."
+                message="🧠 Generating quantum-enhanced reports with DeepSeek..."
             )
 
         enhanced_reports = {}
@@ -679,14 +694,34 @@ class QuantumParallelProcessor:
         for company_name, tavily_report in tavily_data.items():
             quantum_meta = quantum_results.get(company_name, {})
 
-            # 生成量子增强分析
-            quantum_insights = self._generate_quantum_insights(quantum_meta)
+            base_report = tavily_report.get("report", "")
 
-            # 融合报告
+            # 如果基础报告为空，生成基本框架
+            if not base_report.strip():
+                base_report = f"""# {company_name} 公司分析报告
+
+## 公司概况
+*基于可获得的公开信息进行分析*
+
+## 业务分析
+*详细业务信息收集中*
+
+## 财务状况
+*财务数据分析中*
+
+## 市场地位
+*市场定位分析中*
+"""
+
+            # 调用DeepSeek生成最终统一报告
+            final_report = await self._generate_unified_report_with_quantum_insights(
+                company_name, base_report, quantum_meta, tavily_report
+            )
+
             enhanced_report = {
                 "company_name": company_name,
-                "tavily_report": tavily_report.get("report", ""),
-                "quantum_enhanced_analysis": tavily_report.get("report", "") + quantum_insights,
+                "tavily_report": base_report,
+                "quantum_enhanced_analysis": final_report,
                 "analysis_metadata": {
                     "tavily_data": {
                         "company_data": tavily_report.get("company_data", {}),
@@ -713,40 +748,168 @@ class QuantumParallelProcessor:
 
         return enhanced_reports
 
-    def _generate_quantum_insights(self, quantum_meta: Dict[str, Any]) -> str:
-        """生成量子洞察文本"""
+    async def _generate_unified_report_with_quantum_insights(self, company_name: str, base_report: str, 
+                                                           quantum_meta: Dict[str, Any], 
+                                                           tavily_data: Dict[str, Any]) -> str:
+        """使用DeepSeek生成融合量子洞察的专业金融报告"""
+        
+        # 提取详细的量子分析数据
+        quantum_features = quantum_meta.get("quantum_features", [])
         quantum_advantage_score = quantum_meta.get("quantum_advantage_score", 0.0)
         entanglement_strength = quantum_meta.get("entanglement_strength", 0.0)
         measurement_probability = quantum_meta.get("measurement_probability", 0.0)
+        
+        # 构建详细的量子分析解释
+        quantum_analysis_detail = self._build_quantum_analysis_context(
+            quantum_features, quantum_advantage_score, entanglement_strength, measurement_probability
+        )
+        
+        # 获取参考数据源信息
+        references = tavily_data.get("references", [])
+        data_sources = f"基于{len(references)}个权威数据源" if references else "基于公开信息"
+        
+        prompt = f"""你是一位资深的金融分析师和量化投资专家。请基于以下信息，为{company_name}生成一份专业的公司研究报告。
 
-        insights = f"""
+【基础研究报告】
+{base_report}
+
+【量子并行分析核心洞察】
+本分析采用了先进的量子并行计算技术，同时处理多家公司数据以获得更准确的相对比较结果。以下是关键量子分析指标：
+
+1. **市场差异化指数**: {quantum_advantage_score:.4f}
+   - 范围：0-1，当前值：{quantum_advantage_score:.4f}
+   - 解读：{'高度差异化企业，具备独特竞争优势' if quantum_advantage_score > 0.7 else '适度差异化，有一定特色' if quantum_advantage_score > 0.4 else '同质化程度较高，需要寻找差异化路径'}
+   - 投资意义：差异化程度直接影响企业的定价权和盈利能力
+
+2. **行业关联度系数**: {entanglement_strength:.4f}
+   - 范围：0-1，当前值：{entanglement_strength:.4f}
+   - 解读：{'高度依赖行业周期，系统性风险较高' if entanglement_strength > 0.7 else '中等行业敏感度，有一定独立性' if entanglement_strength > 0.4 else '相对独立于行业趋势，个股特征明显'}
+   - 投资意义：决定了宏观经济和行业政策对公司的影响程度
+
+3. **市场权重指数**: {measurement_probability:.4f}
+   - 解读：{'行业核心企业，具有重要市场地位' if measurement_probability > 0.15 else '重要参与者，有一定影响力' if measurement_probability > 0.1 else '一般参与者，关注成长潜力'}
+   - 投资意义：反映了公司在同类企业中的相对重要性和市场影响力
+
+4. **量子特征向量**: {quantum_features}
+   - 这些数值反映了公司在多维度特征空间中的位置
+   - 通过量子叠加态分析得出，提供了传统分析无法获得的深层洞察
+
+{quantum_analysis_detail}
+
+【数据来源】
+{data_sources}，通过量子并行处理技术进行深度分析
+
+【报告要求】
+请将以上信息整合成一份专业的金融研究报告，特别注意：
+
+1. **量子分析的商业价值转化**：将量子计算结果转化为具体的商业洞察和投资建议
+2. **风险评估**：基于行业关联度和市场地位评估投资风险
+3. **投资策略**：根据差异化指数和市场权重制定投资策略
+4. **专业术语**：使用标准的金融分析和投资研究术语
+5. **结构化分析**：保持逻辑清晰的Markdown格式
+
+报告结构应包含：
+- 执行摘要（含投资评级）
+- 公司概况与业务分析  
+- 财务状况分析
+- 市场地位与竞争优势（重点融入量子分析洞察）
+- 风险因素评估
+- 投资建议与目标价位
+- 附录：量子分析技术说明
+
+请确保量子分析的独特价值在报告中得到充分体现。"""
+
+        try:
+            # 初始化DeepSeek客户端
+            if not hasattr(self, 'deepseek_client'):
+                from openai import OpenAI
+                api_key = os.getenv("DEEPSEEK_API_KEY")
+                if not api_key:
+                    logger.warning("DEEPSEEK_API_KEY not found, using fallback report generation")
+                    return self._generate_fallback_report(company_name, base_report, quantum_meta)
+                
+                self.deepseek_client = OpenAI(
+                    api_key=api_key,
+                    base_url="https://api.deepseek.com"
+                )
+
+            response = self.deepseek_client.chat.completions.create(
+                model="deepseek-chat",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """你是一位顶级的金融分析师和量化投资专家，拥有20年的投资研究经验。
+你擅长将复杂的量化分析结果转化为清晰的投资洞察，特别是在利用先进计算技术进行企业分析方面有独到见解。
+你的报告以专业性、准确性和实用性著称，深受机构投资者信赖。"""
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0.2,  # 降低温度确保专业性
+                max_tokens=6000,  # 增加token数量确保完整报告
+                top_p=0.9
+            )
+            
+            unified_report = response.choices[0].message.content.strip()
+            logger.info(f"✅ DeepSeek成功生成{company_name}量子增强报告 ({len(unified_report)}字符)")
+            return unified_report
+            
+        except Exception as e:
+            logger.error(f"❌ DeepSeek报告生成失败: {e}")
+            return self._generate_fallback_report(company_name, base_report, quantum_meta)
+
+    def _build_quantum_analysis_context(self, quantum_features: List[float], 
+                                      quantum_advantage_score: float,
+                                      entanglement_strength: float, 
+                                      measurement_probability: float) -> str:
+        """构建量子分析的详细上下文说明"""
+        
+        context = f"""
+【量子分析技术背景】
+本分析采用了基于wuyue量子框架的并行计算技术，通过以下步骤获得洞察：
+
+1. **量子编码阶段**：将公司的多维特征数据编码到{self.total_qubits}个量子比特的叠加态中
+2. **并行处理阶段**：利用量子叠加态同时分析多家公司，发现隐藏的关联模式
+3. **量子测量阶段**：通过{self.shots}次量子测量获得统计结果
+4. **特征提取阶段**：从量子态坍缩结果中提取{len(quantum_features)}维特征向量
+
+【量子优势说明】
+相比传统串行分析，量子并行分析具有以下优势：
+- **真并行性**：利用量子叠加态实现真正的同时计算，而非时间片轮转
+- **关联发现**：通过量子纠缠自动捕获公司间的隐含关联关系
+- **特征增强**：量子测量提供传统方法无法获得的非线性特征组合
+- **相对比较**：在同一量子系统中处理多家公司，获得更准确的相对评估
+
+【关键指标解读】
+- 市场差异化指数反映了公司在量子特征空间中的独特性
+- 行业关联度系数来源于量子纠缠强度，揭示了公司与行业的深层关联
+- 市场权重指数基于量子测量概率，体现了公司的相对重要性
+
+这些指标的组合为投资决策提供了全新的量化维度。"""
+        
+        return context
+
+    def _generate_fallback_report(self, company_name: str, base_report: str, 
+                                quantum_meta: Dict[str, Any]) -> str:
+        """生成降级报告（当DeepSeek不可用时）"""
+        quantum_insights = self._generate_quantum_insights(quantum_meta)
+        
+        fallback_report = f"""{base_report}
 
 ## 🔬 量子并行分析增强洞察
 
-**量子优势评分**: {quantum_advantage_score:.3f} (范围: 0-1，越高表示量子计算优势越明显)
-**纠缠强度**: {entanglement_strength:.3f} (表示与其他公司的关联程度)
-**量子测量概率**: {measurement_probability:.3f} (表示该公司在量子叠加态中的权重)
+**重要说明**：以下分析基于先进的量子并行计算技术，为传统分析提供了独特的量化视角。
 
-### 量子特征解读
+{quantum_insights}
 
-- **量子优势评分 {quantum_advantage_score:.3f}** {'较高' if quantum_advantage_score > 0.6 else '中等' if quantum_advantage_score > 0.3 else '较低'}，
-  表明该公司的特征在量子空间中{'具有明显的非经典特性' if quantum_advantage_score > 0.6 else '表现为经典与量子的混合特性' if quantum_advantage_score > 0.3 else '主要表现为经典特性'}。
-
-- **纠缠强度 {entanglement_strength:.3f}** 显示该公司与同批次其他公司的{'强关联性' if entanglement_strength > 0.7 else '中等关联性' if entanglement_strength > 0.4 else '弱关联性'}，
-  {'建议重点关注行业整体趋势对该公司的影响' if entanglement_strength > 0.7 else '需要平衡考虑行业因素和公司个体特性' if entanglement_strength > 0.4 else '该公司相对独立，更多受自身基本面驱动'}。
-
-### 量子并行处理优势
-
-本分析通过量子叠加态同时处理多家公司数据，相比传统串行分析：
-- ✅ **真并行**: 利用量子叠加态实现真正的同时计算
-- ✅ **关联发现**: 通过量子纠缠自动捕获公司间隐含关联
-- ✅ **特征增强**: 量子测量提供传统方法无法获得的洞察维度
-- ✅ **数据融合**: 结合Tavily高质量数据收集和量子计算优势
-
-*注：本量子分析基于wuyue量子模拟器，使用{self.total_qubits}个量子比特，{self.n_layers}层量子线路，{self.shots}次测量。*
-        """
-
-        return insights
+---
+*注：本报告采用量子并行处理技术生成，如需更详细的专业分析，请确保DeepSeek API配置正确。*
+"""
+        
+        logger.info(f"📝 {company_name}使用降级模式生成报告")
+        return fallback_report
 
     async def _save_to_knowledge_base(self, enhanced_reports: Dict[str, Any],
                                     original_companies: List[Dict[str, str]]) -> Dict[str, Any]:
@@ -799,3 +962,4 @@ class QuantumParallelProcessor:
 
         logger.info(f"📊 量子批量分析摘要已保存: {batch_filepath}")
         return batch_summary
+
