@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 from langchain_core.messages import AIMessage
 from openai import AsyncOpenAI
+from openai import OpenAI
 
 from ..classes import ResearchState
 from ..utils.references import format_references_section
@@ -22,7 +23,10 @@ class Editor:
             raise ValueError("OPENAI_API_KEY environment variable is not set")
         
         # Configure OpenAI
-        self.openai_client = AsyncOpenAI(api_key=self.openai_key)
+        self.openai_client = OpenAI(
+                                api_key=self.openai_key,
+                                base_url="https://api.deepseek.com"  # DeepSeek API endpoint
+                            )
         
         # Initialize context dictionary for use across methods
         self.context = {
@@ -253,7 +257,7 @@ Return the report in clean markdown format. No explanations or commentary."""
         
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4.1",
+                model="deepseek-chat",
                 messages=[
                     {
                         "role": "system",
@@ -264,7 +268,7 @@ Return the report in clean markdown format. No explanations or commentary."""
                         "content": prompt
                     }
                 ],
-                temperature=0,
+                temperature=0.01,
                 stream=False
             )
             initial_report = response.choices[0].message.content.strip()
@@ -335,7 +339,7 @@ Return the cleaned report in flawless markdown format. No explanations or commen
         
         try:
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4.1-mini", 
+                model="deepseek-chat", 
                 messages=[
                     {
                         "role": "system",
@@ -346,7 +350,7 @@ Return the cleaned report in flawless markdown format. No explanations or commen
                         "content": prompt
                     }
                 ],
-                temperature=0,
+                temperature=0.01,
                 stream=True
             )
             

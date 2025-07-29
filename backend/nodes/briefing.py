@@ -198,7 +198,7 @@ Analyze the following documents and extract key information. Provide only the br
                         "content": prompt
                     }
                 ],
-                temperature=0.3,
+                temperature=0.2,
                 max_tokens=2000
             )
             

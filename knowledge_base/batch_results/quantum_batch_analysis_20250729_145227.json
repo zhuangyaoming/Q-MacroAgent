@@ -1,0 +1,50 @@
+{
+  "batch_id": "quantum_batch_20250729_145227",
+  "timestamp": "20250729_145227",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 4,
+  "successful_count": 4,
+  "companies_analyzed": [
+    "特斯拉",
+    "小米",
+    "Apple",
+    "Vivo"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.5940962573715931,
+    "avg_entanglement_strength": 0.972841087049138
+  },
+  "input_companies": [
+    {
+      "name": "特斯拉",
+      "industry": "汽车",
+      "company_url": "https://www.tesla.com",
+      "hq_location": "美国"
+    },
+    {
+      "name": "小米",
+      "industry": "科技",
+      "company_url": "https://www.mi.com",
+      "hq_location": "中国"
+    },
+    {
+      "name": "Apple",
+      "industry": "科技",
+      "company_url": "https://www.apple.com",
+      "hq_location": "美国"
+    },
+    {
+      "name": "Vivo",
+      "industry": "科技",
+      "company_url": "https://www.vivo.com",
+      "hq_location": "中国"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

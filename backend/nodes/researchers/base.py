@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 from openai import AsyncOpenAI
+from openai import OpenAI
+
 from tavily import AsyncTavilyClient
 
 from ...classes import ResearchState
@@ -21,9 +23,12 @@ class BaseResearcher:
             raise ValueError("Missing API keys")
             
         self.tavily_client = AsyncTavilyClient(api_key=tavily_key)
-        self.openai_client = AsyncOpenAI(api_key=openai_key)
+        self.openai_client = OpenAI(
+                                api_key=openai_key,
+                                base_url="https://api.deepseek.com"  # DeepSeek API endpoint
+                            )
         self.analyst_type = "base_researcher"  # Default type
-
+        
     @property
     def analyst_type(self) -> str:
         if not hasattr(self, '_analyst_type'):
@@ -46,7 +51,7 @@ class BaseResearcher:
             logger.info(f"Generating queries for {company} as {self.analyst_type}")
             
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4.1-mini",
+                model="deepseek-chat",
                 messages=[
                     {
                         "role": "system",
@@ -58,7 +63,7 @@ class BaseResearcher:
 {self._format_query_prompt(prompt, company, hq, current_year)}"""
                     }
                 ],
-                temperature=0,
+                temperature=0.01,
                 max_tokens=4096,
                 stream=True
             )
