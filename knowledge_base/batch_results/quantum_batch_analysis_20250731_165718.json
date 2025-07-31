@@ -1,0 +1,36 @@
+{
+  "batch_id": "quantum_batch_20250731_165718",
+  "timestamp": "20250731_165718",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 2,
+  "successful_count": 2,
+  "companies_analyzed": [
+    "宁德时代新能源科技股份有限公司",
+    "智米科技有限公司"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.6108557287614976,
+    "avg_entanglement_strength": 0.8203233547996787
+  },
+  "input_companies": [
+    {
+      "name": "宁德时代新能源科技股份有限公司",
+      "industry": "动力电池制造",
+      "company_url": "https://www.catl.com/",
+      "hq_location": "中国，宁德市"
+    },
+    {
+      "name": "智米科技有限公司",
+      "industry": "智能家居制造",
+      "company_url": "https://www.zhimi.com/",
+      "hq_location": "中国，北京市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

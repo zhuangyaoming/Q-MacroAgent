@@ -833,8 +833,7 @@ class QuantumParallelProcessor:
                 from openai import OpenAI
                 api_key = os.getenv("DEEPSEEK_API_KEY")
                 if not api_key:
-                    logger.warning("DEEPSEEK_API_KEY not found, using fallback report generation")
-                    return self._generate_fallback_report(company_name, base_report, quantum_meta)
+                    raise ValueError("DEEPSEEK_API_KEY not found. DeepSeek API is required for quantum analysis.")
                 
                 self.deepseek_client = OpenAI(
                     api_key=api_key,
@@ -856,7 +855,7 @@ class QuantumParallelProcessor:
                     }
                 ],
                 temperature=0.2,  # 降低温度确保专业性
-                max_tokens=16000,  # 增加到16000 tokens
+                max_tokens=8192,  # DeepSeek最大支持8192 tokens
                 top_p=0.9
             )
             
@@ -866,14 +865,14 @@ class QuantumParallelProcessor:
             
         except Exception as e:
             logger.error(f"❌ DeepSeek报告生成失败: {e}")
-            return self._generate_fallback_report(company_name, base_report, quantum_meta)
+            raise Exception(f"DeepSeek API调用失败: {str(e)}")
 
-    def _build_quantum_analysis_context(self, quantum_features: List[float], 
+    def _build_quantum_analysis_context(self, quantum_features: List[float],
                                       quantum_advantage_score: float,
-                                      entanglement_strength: float, 
+                                      entanglement_strength: float,
                                       measurement_probability: float) -> str:
         """构建量子分析的详细上下文说明"""
-        
+
         context = f"""
 【量子分析技术背景】
 本分析采用了基于wuyue量子框架的并行计算技术，通过以下步骤获得洞察：
@@ -896,28 +895,8 @@ class QuantumParallelProcessor:
 - 市场权重指数基于量子测量概率，体现了公司的相对重要性
 
 这些指标的组合为投资决策提供了全新的量化维度。"""
-        
+
         return context
-
-    def _generate_fallback_report(self, company_name: str, base_report: str, 
-                                quantum_meta: Dict[str, Any]) -> str:
-        """生成降级报告（当DeepSeek不可用时）"""
-        quantum_insights = self._generate_quantum_insights(quantum_meta)
-        
-        fallback_report = f"""{base_report}
-
-## 🔬 量子并行分析增强洞察
-
-**重要说明**：以下分析基于先进的量子并行计算技术，为传统分析提供了独特的量化视角。
-
-{quantum_insights}
-
----
-*注：本报告采用量子并行处理技术生成，如需更详细的专业分析，请确保DeepSeek API配置正确。*
-"""
-        
-        logger.info(f"📝 {company_name}使用降级模式生成报告")
-        return fallback_report
 
     async def _save_to_knowledge_base(self, enhanced_reports: Dict[str, Any],
                                     original_companies: List[Dict[str, str]]) -> Dict[str, Any]:
@@ -977,6 +956,19 @@ class QuantumParallelProcessor:
 
         logger.info(f"📊 量子批量分析摘要已保存: {batch_filepath}")
         return batch_summary
+
+    # 为了保持向后兼容性，添加方法别名
+    async def quantum_parallel_analyze(self, companies: List[Dict[str, str]],
+                                     websocket_manager=None, job_id=None) -> Dict[str, Any]:
+        """
+        量子并行分析方法 - 这是主要的公共接口
+        为了保持与application.py中调用的兼容性
+        """
+        return await self.process_companies_quantum_parallel(
+            companies, websocket_manager, job_id
+        )
+
+
 
 
 

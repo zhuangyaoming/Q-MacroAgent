@@ -309,7 +309,7 @@ async def process_quantum_batch_research(job_id: str, data: QuantumBatchResearch
         await asyncio.sleep(1)  # Allow WebSocket connection
 
         # 使用量子并行处理器
-        results = await quantum_processor.quantum_parallel_analyze(
+        results = await quantum_processor.process_companies_quantum_parallel(
             data.companies,
             websocket_manager=manager,
             job_id=job_id
