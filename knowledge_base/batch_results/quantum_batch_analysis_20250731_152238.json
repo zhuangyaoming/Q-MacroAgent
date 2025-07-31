@@ -1,0 +1,50 @@
+{
+  "batch_id": "quantum_batch_20250731_152238",
+  "timestamp": "20250731_152238",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 4,
+  "successful_count": 4,
+  "companies_analyzed": [
+    "车好多旧机动车经纪有限公司",
+    "小鹏汽车科技有限公司",
+    "蔚来汽车有限公司",
+    "上汽通用五菱汽车股份有限公司"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.5969711165175423,
+    "avg_entanglement_strength": 0.9609403540326491
+  },
+  "input_companies": [
+    {
+      "name": "车好多旧机动车经纪有限公司",
+      "industry": "汽车流通服务",
+      "company_url": "https://www.guazi.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "小鹏汽车科技有限公司",
+      "industry": "新能源汽车制造",
+      "company_url": "https://www.xiaopeng.com/",
+      "hq_location": "中国，广州市"
+    },
+    {
+      "name": "蔚来汽车有限公司",
+      "industry": "新能源汽车制造",
+      "company_url": "https://www.nio.cn/",
+      "hq_location": "中国，合肥市"
+    },
+    {
+      "name": "上汽通用五菱汽车股份有限公司",
+      "industry": "新能源汽车制造",
+      "company_url": "https://wuling.com/",
+      "hq_location": "中国，柳州市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

@@ -1,0 +1,50 @@
+{
+  "batch_id": "quantum_batch_20250731_145813",
+  "timestamp": "20250731_145813",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 4,
+  "successful_count": 4,
+  "companies_analyzed": [
+    "特来电新能源股份有限公司",
+    "北汽蓝谷新能源科技股份有限公司",
+    "地平线机器人技术研发有限公司",
+    "云米科技有限公司"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.5905357183858261,
+    "avg_entanglement_strength": 0.9640700933864043
+  },
+  "input_companies": [
+    {
+      "name": "特来电新能源股份有限公司",
+      "industry": "新能源充电服务",
+      "company_url": "https://www.teld.cn/",
+      "hq_location": "中国，青岛市"
+    },
+    {
+      "name": "北汽蓝谷新能源科技股份有限公司",
+      "industry": "汽车制造代工",
+      "company_url": "https://www.bjev.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "地平线机器人技术研发有限公司",
+      "industry": "智能驾驶芯片",
+      "company_url": "https://www.horizon.auto/about",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "云米科技有限公司",
+      "industry": "智能家电制造",
+      "company_url": "https://viomi.com/",
+      "hq_location": "中国，佛山市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

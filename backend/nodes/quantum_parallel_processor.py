@@ -80,29 +80,25 @@ class QuantumParallelProcessor:
                          self.quantum_metadata_dir, self.batch_results_dir]:
             os.makedirs(directory, exist_ok=True)
     
-    async def quantum_parallel_analyze(self, companies_data: List[Dict[str, str]], 
-                                     websocket_manager=None, job_id=None) -> Dict[str, Any]:
-        """
-        量子并行分析多家公司
+    async def process_companies_quantum_parallel(self, companies: List[Dict[str, str]], 
+                                                websocket_manager=None, job_id=None) -> Dict[str, Any]:
+        """量子并行处理多家公司"""
+        # 保存原始公司数据供后续使用
+        self.original_companies = companies
         
-        Args:
-            companies_data: [{"name": "特斯拉", "industry": "汽车", "url": "..."}, ...]
-            websocket_manager: WebSocket管理器
-            job_id: 任务ID
-        """
-        logger.info(f"🚀 开始量子并行分析 {len(companies_data)} 家公司...")
+        logger.info(f"🚀 开始量子并行分析 {len(companies)} 家公司...")
         
         if websocket_manager and job_id:
             await websocket_manager.send_status_update(
                 job_id, 
                 status="processing", 
-                message=f"🔬 Starting quantum parallel analysis of {len(companies_data)} companies"
+                message=f"🔬 Starting quantum parallel analysis of {len(companies)} companies"
             )
         
         try:
             # 第一阶段：使用Tavily并行收集高质量数据
             logger.info("📊 阶段1: 使用Tavily收集公司数据...")
-            tavily_data = await self._collect_tavily_data(companies_data, websocket_manager, job_id)
+            tavily_data = await self._collect_tavily_data(companies, websocket_manager, job_id)
             
             # 第二阶段：量子编码和并行处理
             logger.info("⚡ 阶段2: 量子编码和并行计算...")
@@ -114,7 +110,7 @@ class QuantumParallelProcessor:
             
             # 第四阶段：保存到知识库
             logger.info("💾 阶段4: 保存到知识库...")
-            batch_summary = await self._save_to_knowledge_base(final_reports, companies_data)
+            batch_summary = await self._save_to_knowledge_base(final_reports, companies)
             
             result = {
                 "successful_reports": final_reports,
@@ -132,7 +128,7 @@ class QuantumParallelProcessor:
                 await websocket_manager.send_status_update(
                     job_id,
                     status="completed",
-                    message=f"🎉 Quantum parallel analysis completed for {len(companies_data)} companies",
+                    message=f"🎉 Quantum parallel analysis completed for {len(companies)} companies",
                     result=result
                 )
             
@@ -693,6 +689,9 @@ class QuantumParallelProcessor:
 
         for company_name, tavily_report in tavily_data.items():
             quantum_meta = quantum_results.get(company_name, {})
+            
+            # 从原始公司数据中获取基本信息
+            company_info = next((c for c in self.original_companies if c["name"] == company_name), {})
 
             base_report = tavily_report.get("report", "")
 
@@ -720,9 +719,18 @@ class QuantumParallelProcessor:
 
             enhanced_report = {
                 "company_name": company_name,
+                "company_industry": company_info.get("industry", ""),
+                "company_location": company_info.get("hq_location", ""),
+                "company_url": company_info.get("company_url", ""),
                 "tavily_report": base_report,
                 "quantum_enhanced_analysis": final_report,
                 "analysis_metadata": {
+                    "company_basic_info": {
+                        "name": company_name,
+                        "industry": company_info.get("industry", ""),
+                        "hq_location": company_info.get("hq_location", ""),
+                        "company_url": company_info.get("company_url", "")
+                    },
                     "tavily_data": {
                         "company_data": tavily_report.get("company_data", {}),
                         "financial_data": tavily_report.get("financial_data", {}),
@@ -848,7 +856,7 @@ class QuantumParallelProcessor:
                     }
                 ],
                 temperature=0.2,  # 降低温度确保专业性
-                max_tokens=6000,  # 增加token数量确保完整报告
+                max_tokens=16000,  # 增加到16000 tokens
                 top_p=0.9
             )
             
@@ -918,7 +926,14 @@ class QuantumParallelProcessor:
 
         # 保存单个公司报告
         for company_name, report in enhanced_reports.items():
-            filename = f"{company_name}_quantum_enhanced_{timestamp}.json"
+            # 从原始公司数据中获取行业和位置信息
+            company_info = next((c for c in original_companies if c["name"] == company_name), {})
+            industry = company_info.get("industry", "未知行业").replace("/", "-").replace("\\", "-")
+            location = company_info.get("hq_location", "未知位置").replace("/", "-").replace("\\", "-")
+            
+            # 新的命名格式: 公司名_行业_位置_quantum_enhanced_时间戳.json
+            safe_company_name = company_name.replace("/", "-").replace("\\", "-")
+            filename = f"{safe_company_name}_{industry}_{location}_quantum_enhanced_{timestamp}.json"
             filepath = os.path.join(self.company_reports_dir, filename)
 
             with open(filepath, 'w', encoding='utf-8') as f:
@@ -962,4 +977,11 @@ class QuantumParallelProcessor:
 
         logger.info(f"📊 量子批量分析摘要已保存: {batch_filepath}")
         return batch_summary
+
+
+
+
+
+
+
 
