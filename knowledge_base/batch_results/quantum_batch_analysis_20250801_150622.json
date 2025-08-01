@@ -1,0 +1,64 @@
+{
+  "batch_id": "quantum_batch_20250801_150622",
+  "timestamp": "20250801_150622",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 6,
+  "successful_count": 6,
+  "companies_analyzed": [
+    "物美科技集团有限公司",
+    "北京首农食品集团有限公司",
+    "北京建工集团有限责任公司",
+    "中国铁建股份有限公司",
+    "恩泰科（北京）科技有限公司",
+    "北京泡泡玛特文化创意有限公司"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.6486115635507362,
+    "avg_entanglement_strength": 0.8352325389342924
+  },
+  "input_companies": [
+    {
+      "name": "物美科技集团有限公司",
+      "industry": "零售连锁",
+      "company_url": "http://www.wumart.com",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京首农食品集团有限公司",
+      "industry": "农业食品",
+      "company_url": "https://www.bjcag.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京建工集团有限责任公司",
+      "industry": "建筑施工",
+      "company_url": "https://www.bcegc.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "中国铁建股份有限公司",
+      "industry": "基建工程",
+      "company_url": "https://www.crcc.cn/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "恩泰科（北京）科技有限公司",
+      "industry": "环保水处理",
+      "company_url": "http://www.iontechbj.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京泡泡玛特文化创意有限公司",
+      "industry": "潮玩IP/文创",
+      "company_url": "https://www.popmart.com.cn/home",
+      "hq_location": "中国，北京市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

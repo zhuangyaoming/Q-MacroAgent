@@ -1,0 +1,57 @@
+{
+  "batch_id": "quantum_batch_20250801_142610",
+  "timestamp": "20250801_142610",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 5,
+  "successful_count": 5,
+  "companies_analyzed": [
+    "北京爱奇艺科技有限公司",
+    "北京学而思教育科技有限公司",
+    "北京升鑫网络科技有限公司",
+    "北京未磁科技有限公司",
+    "汽集团乘用车公司（智己汽车）"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.6478782139217636,
+    "avg_entanglement_strength": 0.7888483230333817
+  },
+  "input_companies": [
+    {
+      "name": "北京爱奇艺科技有限公司",
+      "industry": "在线视频",
+      "company_url": "https://www.iqiyi.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京学而思教育科技有限公司",
+      "industry": "K12教育",
+      "company_url": "https://www.xueersi.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京升鑫网络科技有限公司",
+      "industry": "数据安全",
+      "company_url": "https://www.qingteng.cn/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "北京未磁科技有限公司",
+      "industry": "量子传感",
+      "company_url": "https://www.xmagtech.com/",
+      "hq_location": "中国，北京市"
+    },
+    {
+      "name": "汽集团乘用车公司（智己汽车）",
+      "industry": "新能源汽车制造",
+      "company_url": "https://www.immotor.com",
+      "hq_location": "中国，上海市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

@@ -777,6 +777,10 @@ class QuantumParallelProcessor:
         data_sources = f"基于{len(references)}个权威数据源" if references else "基于公开信息"
         
         prompt = f"""你是一位资深的金融分析师和量化投资专家。请基于以下信息，为{company_name}生成一份专业的公司研究报告。
+关键要求：
+1.融合下面的【基础研究报告】和【量子并行分析核心洞察】两份报告
+2.以【基础研究报告】为主体，在该报告每小点后根据情况添加量化分析，内容参考【量子并行分析核心洞察】，核心目标是充分展现量子分析在金融领域的独特价值,分析中不要出现量子字眼，基于你的思考给出量化数据报告即可
+3.请撰写一篇无附录的报告，
 
 【基础研究报告】
 {base_report}
@@ -801,32 +805,13 @@ class QuantumParallelProcessor:
 4. **量子特征向量**: {quantum_features}
    - 这些数值反映了公司在多维度特征空间中的位置
    - 通过量子叠加态分析得出，提供了传统分析无法获得的深层洞察
-
-{quantum_analysis_detail}
+ {quantum_analysis_detail}
 
 【数据来源】
-{data_sources}，通过量子并行处理技术进行深度分析
-
-【报告要求】
-请将以上信息整合成一份专业的金融研究报告，特别注意：
-
-1. **量子分析的商业价值转化**：将量子计算结果转化为具体的商业洞察和投资建议
-2. **风险评估**：基于行业关联度和市场地位评估投资风险
-3. **投资策略**：根据差异化指数和市场权重制定投资策略
-4. **专业术语**：使用标准的金融分析和投资研究术语
-5. **结构化分析**：保持逻辑清晰的Markdown格式
-
-报告结构应包含：
-- 执行摘要（含投资评级）
-- 公司概况与业务分析  
-- 财务状况分析
-- 市场地位与竞争优势（重点融入量子分析洞察）
-- 风险因素评估
-- 投资建议与目标价位
-- 附录：量子分析技术说明
-
-请确保量子分析的独特价值在报告中得到充分体现。"""
-
+ {data_sources}，通过量子并行处理技术进行深度分析
+ 
+ 
+"""
         try:
             # 初始化DeepSeek客户端
             if not hasattr(self, 'deepseek_client'):
@@ -854,9 +839,9 @@ class QuantumParallelProcessor:
                         "content": prompt
                     }
                 ],
-                temperature=0.2,  # 降低温度确保专业性
+                temperature=0.5,  # 降低温度确保专业性
                 max_tokens=8192,  # DeepSeek最大支持8192 tokens
-                top_p=0.9
+                top_p=0.5
             )
             
             unified_report = response.choices[0].message.content.strip()

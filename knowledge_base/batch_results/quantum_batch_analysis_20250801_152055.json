@@ -1,0 +1,29 @@
+{
+  "batch_id": "quantum_batch_20250801_152055",
+  "timestamp": "20250801_152055",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 1,
+  "successful_count": 1,
+  "companies_analyzed": [
+    "高德打车"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.6489795918367348,
+    "avg_entanglement_strength": 0.8055268060251803
+  },
+  "input_companies": [
+    {
+      "name": "高德打车",
+      "industry": "聚合打车平台",
+      "company_url": "https://dache.amap.com",
+      "hq_location": "中国，北京市"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}
