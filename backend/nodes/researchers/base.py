@@ -58,7 +58,7 @@ class BaseResearcher:
 {self._format_query_prompt(prompt, company, hq, current_year)}"""
                     }
                 ],
-                temperature=0,
+                temperature=0.001,
                 max_tokens=4096,
                 stream=True
             )

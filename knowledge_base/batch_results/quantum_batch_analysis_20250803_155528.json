@@ -1,0 +1,29 @@
+{
+  "batch_id": "quantum_batch_20250803_155528",
+  "timestamp": "20250803_155528",
+  "analysis_type": "quantum_parallel_enhanced",
+  "total_companies": 1,
+  "successful_count": 1,
+  "companies_analyzed": [
+    "特斯拉"
+  ],
+  "quantum_parameters": {
+    "total_qubits": 7,
+    "quantum_layers": 3,
+    "measurement_shots": 1000,
+    "max_companies": 8
+  },
+  "quantum_statistics": {
+    "avg_quantum_advantage": 0.6442000297685659,
+    "avg_entanglement_strength": 0.643012389692351
+  },
+  "input_companies": [
+    {
+      "name": "特斯拉",
+      "industry": "汽车",
+      "company_url": "https://www.tesla.com",
+      "hq_location": "美国"
+    }
+  ],
+  "reports_location": "knowledge_base\\company_reports"
+}

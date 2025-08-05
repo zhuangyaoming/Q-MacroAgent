@@ -780,7 +780,7 @@ class QuantumParallelProcessor:
 关键要求：
 1.融合下面的【基础研究报告】和【量子并行分析核心洞察】两份报告
 2.以【基础研究报告】为主体，在该报告每小点后根据情况添加量化分析，内容参考【量子并行分析核心洞察】，核心目标是充分展现量子分析在金融领域的独特价值,分析中不要出现量子字眼，基于你的思考给出量化数据报告即可
-3.请撰写一篇无附录的报告，
+3.请撰写一篇无附录的报告
 
 【基础研究报告】
 {base_report}
@@ -839,9 +839,9 @@ class QuantumParallelProcessor:
                         "content": prompt
                     }
                 ],
-                temperature=0.5,  # 降低温度确保专业性
+                temperature=0.4,  # 降低温度确保专业性
                 max_tokens=8192,  # DeepSeek最大支持8192 tokens
-                top_p=0.5
+                top_p=0.6,  # 降低top_p以减少随机性
             )
             
             unified_report = response.choices[0].message.content.strip()

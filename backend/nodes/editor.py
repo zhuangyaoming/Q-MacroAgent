@@ -264,7 +264,7 @@ Return the report in clean markdown format. No explanations or commentary."""
                         "content": prompt
                     }
                 ],
-                temperature=0,
+                temperature=0.001,
                 stream=False
             )
             initial_report = response.choices[0].message.content.strip()
@@ -346,7 +346,7 @@ Return the cleaned report in flawless markdown format. No explanations or commen
                         "content": prompt
                     }
                 ],
-                temperature=0,
+                temperature=0.001,
                 stream=True
             )
             
